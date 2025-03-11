@@ -1,12 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models import BigAutoField, DateTimeField
+from django.db.models import BigAutoField, DateTimeField, IntegerField
 from django.forms import CharField, DecimalField
 
 
 
 class MyUser(User):
-    number = models.CharField(length = 11)
+    number = models.CharField(max_length = 11)
     birthday = models.DateTimeField
     sex = models.BooleanField
 
@@ -21,9 +21,9 @@ class Address(models.Model):
     )
 
 class Cards(models.Model):
-    number = CharField(length=16)
+    number = CharField(max_length=16)
     expiry_date = DateTimeField
-    CVV = BigAutoField()
+    CVV = CharField(max_length=3)
     user_id = models.ForeignKey(
         MyUser, on_delete=models.DO_NOTHING,
         null=True
@@ -32,7 +32,7 @@ class Cards(models.Model):
 class Brand(models.Model):
     name = CharField(max_length=32)
     content = CharField(max_length = 1023)
-    registration_certificate = CharField(length=15)
+    registration_certificate = CharField(max_length=15)
 
 class BrandLogo(models.Model):
     logo = CharField(max_length=256)
@@ -42,11 +42,12 @@ class BrandLogo(models.Model):
         null=True
     )
 
+
 class Product(models.Model):
     name = CharField(max_length=32)
     price = DecimalField(max_digits = 11, decimal_places = 3)
     content = CharField(max_length = 1023)
-    quantity = BigAutoField()
+    quantity = IntegerField()
 
     brand_id = models.ForeignKey(
         Brand, on_delete=models.DO_NOTHING,
@@ -62,7 +63,7 @@ class ProductImage(models.Model):
     )
 
 class Review(models.Model):
-    evaluation = BigAutoField()
+    evaluation = IntegerField()
     content = CharField(max_length=1023)
 
     product_id = models.ForeignKey(
